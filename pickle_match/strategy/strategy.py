@@ -84,7 +84,7 @@ def generate_pairings(teams):
 
 def _check_team_balance(matches, teams):
     player_to_team = {}
-    team_balance_map = defaultdict(Counter())
+    team_balance_map = defaultdict(Counter)
     for team in teams:
         for player in team.players:
             player_to_team[player] = team
