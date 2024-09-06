@@ -96,14 +96,9 @@ def _check_team_balance(matches, teams):
             team_balance_map[player_to_team[a]][player_to_team[c]] += 1
             team_balance_map[player_to_team[a]][player_to_team[d]] += 1
 
-            team_balance_map[player_to_team[b]][player_to_team[c]] += 1
-            team_balance_map[player_to_team[b]][player_to_team[d]] += 1
-
             team_balance_map[player_to_team[c]][player_to_team[a]] += 1
             team_balance_map[player_to_team[c]][player_to_team[b]] += 1
 
-            team_balance_map[player_to_team[d]][player_to_team[a]] += 1
-            team_balance_map[player_to_team[d]][player_to_team[b]] += 1
     
     return team_balance_map
     
