@@ -1,11 +1,12 @@
 from random import shuffle
 import collections
 from pickle_match.models.match import Match
-from pickle_match.models.constraints import Constraints
+from pickle_match.models.constraint import Constraint
 
 class MatchGenerator:
     def __init__(self, pairs, constraints):
         self.nodes = pairs
+        self.constraints = constraints
         self.constraints_map = collections.defaultdict(list)
         for constraint in constraints:
             self.constraints_map[constraint.pair].append(constraint)
@@ -24,9 +25,14 @@ class MatchGenerator:
         return True
 
     def _update_constraints(self, matches):
+        new_constraints = []
         for match in matches:
-            C
-        ...
+            new = Constraint(
+                pair=match.first,
+                denied_pair=match.second
+            )
+            new_constraints.append(new)
+        return self.constraints + new_constraints
     
     def generate(self):
         """
@@ -43,7 +49,8 @@ class MatchGenerator:
 
             if self._check_constraints(matches):
 
-                return matches
+
+                return matches, self._update_constraints(matches)
 
 
 
