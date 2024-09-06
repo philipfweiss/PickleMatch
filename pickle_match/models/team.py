@@ -35,7 +35,7 @@ class Teams:
         }
         for idx, team in enumerate(self.teams):
             for player in team.players:
-                team_dict["Team"].append(idx)
+                team_dict["Team"].append(idx+1)
                 team_dict["Player"].append(player.name)
                 team_dict["Rating"].append(player.rating)
 

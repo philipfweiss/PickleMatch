@@ -32,7 +32,18 @@ def generate_teams(players):
     ]
     return Teams(teams=teams)
 
-def generate_best_teams(players, num_attempts=50):
+def generate_best_teams(players, num_attempts=50, explain=False):
+    if explain:
+        print(f"""
+
+Splitting players into three groups (Bottom Quarter, Lower Quarter, Top Half).
+
+Each team will have 1 player from bottom, 1 from lower, and 2 from top half.
+
+We then create {num_attempts} teams randomly, and choose the one with the lowest rating variance between teams.
+              """
+        )
+
     all_teams = [generate_teams(players) for _ in range(num_attempts)]
     return sorted(all_teams, key=lambda teams: teams.rating_variance)[0]
 
