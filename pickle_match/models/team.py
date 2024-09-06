@@ -8,7 +8,7 @@ from pickle_match.models.constraint import Constraint
 
 from typing import List
 
-@dataclass(frozen=True)
+@dataclass
 class Team:
     players: List[Player]
     team_id: int
