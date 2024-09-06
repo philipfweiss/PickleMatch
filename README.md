@@ -1,16 +1,18 @@
-Algorithm:
-- Let {p_1, p_2.... p_n} be the list of players, each with a rating r_i. 
-- Our goal is to find 
-    * Teams of four
-    * 6 rounds of play, switching partner every 2 rounds
+## Computes Optimal Pickleball Pairings
+Given a list of players and their ratings, runs thousands of simulations to find the teams/pairings that are the most fair.
 
-- We wish to minimize
-    * Let A(p_i) be the average opponent rating of player i.
-    * We want to minimize the variance of {A(p_1) .... A(p_n)}
+Used for the Portland "Dinkies for Drinkies" mini pickleball tournaments. 
 
+## How does it work?
 
-Two phases: assigning teams, and finding pairings.
-1. We assign teams of four where the skill level is as close to average as possible.
-2. We generate pairings according to rules above, then calculate the variance.
+The algorithm works in two phases: generating teams and then generating pairings. 
 
-We do this as many times as possible and pick the teams/pairings with minimal variance.
+### Team Generation:
+- Each team consists of 4 players, and the "strength" of the team is the cumulative rating of that team.
+- Each team will have 1 player from the bottom 25%, 1 player from the 25-50% percentile, and 2 players from the top 50%.
+- We randomly generate teams `num_attempts` times and pick the one with the lowest variance in team strength.
+
+### Pairing Generation 
+Dinkies for Drinkies has six rounds of gameplay. Each player keeps the same partner for 2 rounds, and they play with all three partners. No partners can play anyone on their team, and no partners will play the same exact opponents twice. 
+
+We run a graph algorithm to find a pairing schedule respecting the above constraints. We do this `num_attempts` times and choose the pairing with the lowest average rating difference between matches. 
