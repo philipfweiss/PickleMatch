@@ -1,4 +1,4 @@
-from models.team import Team, Teams
+from PickleMatch.models.team import Team, Teams
 from random import shuffle
 
 def chunks(lst, n):
