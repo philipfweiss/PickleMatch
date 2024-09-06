@@ -83,6 +83,8 @@ def generate_pairings(teams):
 
 
 def _check_difficulties(matches):
+    cumulative_difficulties = Counter()
+
     for match in matches:
         difficulties = match.difficulty_counter
         cumulative_difficulties += difficulties
@@ -102,15 +104,9 @@ def generate_best_pairings(teams, num_attempts=10000):
         - No partners may play other partners on their team.
         - No partners may player partners that they have played before (in previous rounds).
     """
-
-    cumulative_difficulties = Counter()
     
     for i in range(num_attempts):
         matches = generate_pairings(teams)
-        for match in matches:
-            difficulties = match.difficulty_counter
-            cumulative_difficulties += difficulties
-        
         if _check_difficulties(matches):
             print("Passed!")
         else:
