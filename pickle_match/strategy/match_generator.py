@@ -39,15 +39,13 @@ class MatchGenerator:
         Pick completely random matches, and if they don't match constraints try again.
         """
         while True:
-            print(self.nodes)
-            print('foobar')
-            5/0
+
             shuffled_nodes = [node for node in self.nodes]
             shuffle(shuffled_nodes)
 
             matches = Matches(matches=[
-                Match(first=self.nodes[idx], second=shuffled_nodes[idx])
-                for idx in range(len(self.nodes))
+                Match(first=shuffled_nodes[2*i], second=shuffled_nodes[2*i+1])
+                for i in range(len(shuffled_nodes // 2))
             ])
 
             if self._check_constraints(matches):
