@@ -23,3 +23,10 @@ class Teams:
     @property 
     def rating_variance(self):
         return variance(team.average_rating for team in self.teams)
+
+    def print_teams(self):
+        for idx, team in enumerate(self.teams):
+            print(f"----- Team {idx} -----")
+            for player in team.players:
+                print(f" * {player.name}")
+            print("")
