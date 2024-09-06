@@ -67,12 +67,12 @@ def generate_pairings(teams):
         mg = MatchGenerator(all_pairs, all_constraints)
         first_matches, new_constraints = mg.generate()
         matches.append(first_matches)
-        average_rating_differences += first_matches.average_rating_difference
+        average_rating_differences.append(first_matches.average_rating_difference)
         # display(HTML(first_matches.to_df(round_no=2*i+1).to_html()))
         mg = MatchGenerator(all_pairs, new_constraints)
         second_matches, _ = mg.generate()
         
-        average_rating_differences += second_matches.average_rating_difference
+        average_rating_differences.append(second_matches.average_rating_difference)
 
         matches.append(second_matches)
 
