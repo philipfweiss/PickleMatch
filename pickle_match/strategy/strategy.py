@@ -90,8 +90,7 @@ def _check_difficulties(matches):
         cumulative_difficulties += difficulties
     
     for player, difficulty in cumulative_difficulties.items():
-        print(player, difficulty)
-        if difficulty < 14 or difficulty > 16:
+        if difficulty < 13 or difficulty > 17:
             return False
     
     print("----")
@@ -99,7 +98,7 @@ def _check_difficulties(matches):
     return True
 
 
-def generate_best_pairings(teams, num_attempts=10000):
+def generate_best_pairings(teams, num_attempts=100000):
     """
     We model pairings as a graph, where each node is 2 players (partners).
 
@@ -109,10 +108,9 @@ def generate_best_pairings(teams, num_attempts=10000):
     """
     
     for i in range(num_attempts):
-        print(i)
         matches = generate_pairings(teams)
         if _check_difficulties(matches):
-            ...
+            print("Found one!", i)
         # for idx, match in enumerate(best_matches):
         #      display(HTML(match.to_df(round_no=idx+1).to_html()))
 
