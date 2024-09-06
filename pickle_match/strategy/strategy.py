@@ -28,7 +28,7 @@ def generate_teams(players):
 
     teams = [ 
         Team(
-            players=[bottom[i], lower[i], upper[2*i], upper[2*i+1]]
+            players=[bottom[i], lower[i], upper[2*i], upper[2*i+1]], team_id=i+1
         )
         for i in range(num_teams)
     ]

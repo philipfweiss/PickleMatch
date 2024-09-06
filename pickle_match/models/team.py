@@ -11,6 +11,7 @@ from typing import List
 @dataclass
 class Team:
     players: List[Player]
+    team_id: int
 
     @property
     def average_rating(self):
@@ -20,12 +21,12 @@ class Team:
     def pairs(self):
         a, b, c, d = self.players
         return [
-            Pair(first=a, second=b), # Round 1 
-            Pair(first=c, second=d),
-            Pair(first=a, second=c), # Round 2
-            Pair(first=b, second=d),
-            Pair(first=a, second=d), # Round 3
-            Pair(first=b, second=c),
+            Pair(first=a, second=b, team_id=self.team_id), # Round 1 
+            Pair(first=c, second=d, team_id=self.team_id),
+            Pair(first=a, second=c, team_id=self.team_id), # Round 2
+            Pair(first=b, second=d, team_id=self.team_id),
+            Pair(first=a, second=d, team_id=self.team_id), # Round 3
+            Pair(first=b, second=c, team_id=self.team_id),
         ]
     
 
@@ -57,9 +58,9 @@ class Teams:
             "Player": [],
             "Rating": [],
         }
-        for idx, team in enumerate(self.teams):
+        for team in self.teams:
             for player in team.players:
-                team_dict["Team"].append(idx+1)
+                team_dict["Team"].append(team.team_id)
                 team_dict["Player"].append(player.name)
                 team_dict["Rating"].append(player.rating)
 

@@ -5,6 +5,7 @@ from pickle_match.models.player import Player
 class Pair:
     first: Player
     second: Player
+    team_id: int
 
     @property
     def average_rating(self):

@@ -24,8 +24,8 @@ class Matches:
         }
         for match in self.matches:
             first_pair, second_pair = match.first, match.second
-            team_dict[title].append(f"{first_pair.first.name} and {first_pair.second.name}")
-            team_dict["---"].append(f"{second_pair.first.name} and {second_pair.second.name}")
+            team_dict[title].append(f"(Team {first_pair.team_id}) {first_pair.first.name} and {first_pair.second.name}")
+            team_dict["---"].append(f"(Team {first_pair.team_id}) {second_pair.first.name} and {second_pair.second.name}")
 
         dataframe = pd.DataFrame.from_dict(team_dict)
         dataframe.style.set_caption(f"Round {round_no} pairings")
