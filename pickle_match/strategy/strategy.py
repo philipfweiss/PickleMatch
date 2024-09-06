@@ -90,22 +90,23 @@ def _check_team_balance(matches, teams):
             player_to_team[player] = team
     
     for match in matches:
-        a, b, c, d = match.first.first, match.first.second, match.second.first, match.second.second
-        team_balance_map[a][player_to_team[b]] += 1
-        team_balance_map[a][player_to_team[c]] += 1
-        team_balance_map[a][player_to_team[d]] += 1
+        for m in match:
+            a, b, c, d = m.first.first, m.first.second, m.second.first, m.second.second
+            team_balance_map[a][player_to_team[b]] += 1
+            team_balance_map[a][player_to_team[c]] += 1
+            team_balance_map[a][player_to_team[d]] += 1
 
-        team_balance_map[b][player_to_team[a]] += 1
-        team_balance_map[b][player_to_team[c]] += 1
-        team_balance_map[b][player_to_team[d]] += 1
+            team_balance_map[b][player_to_team[a]] += 1
+            team_balance_map[b][player_to_team[c]] += 1
+            team_balance_map[b][player_to_team[d]] += 1
 
-        team_balance_map[c][player_to_team[a]] += 1
-        team_balance_map[c][player_to_team[b]] += 1
-        team_balance_map[c][player_to_team[d]] += 1
+            team_balance_map[c][player_to_team[a]] += 1
+            team_balance_map[c][player_to_team[b]] += 1
+            team_balance_map[c][player_to_team[d]] += 1
 
-        team_balance_map[d][player_to_team[a]] += 1
-        team_balance_map[d][player_to_team[b]] += 1
-        team_balance_map[d][player_to_team[c]] += 1
+            team_balance_map[d][player_to_team[a]] += 1
+            team_balance_map[d][player_to_team[b]] += 1
+            team_balance_map[d][player_to_team[c]] += 1
     
     return team_balance_map
     
