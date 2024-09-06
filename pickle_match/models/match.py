@@ -28,4 +28,4 @@ class Matches:
 
         dataframe = pd.DataFrame.from_dict(team_dict)
         dataframe.style.set_caption(f"Round {round_no} pairings")
-        return dataframe
+        return dataframe.to_markdown()
