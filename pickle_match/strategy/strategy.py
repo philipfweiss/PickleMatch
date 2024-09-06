@@ -1,6 +1,8 @@
 from pickle_match.models.team import Team, Teams
+from pickle_match.models.player import Player
 from pickle_match.strategy.match_generator import MatchGenerator
 from random import shuffle
+from collections import Counter
 from IPython.display import display, HTML
 
 def chunks(lst, n):
@@ -19,6 +21,11 @@ def generate_teams(players):
     # Group for bottom 0-25%, 25-50%, 50+%
     bottom, lower, middle, top = list(chunks(sorted_players, num_teams))
     upper = middle + top
+
+
+    bottom = [ Player(name=player.name, rating=player.rating, score=0) for player in bottom]
+    lower = [ Player(name=player.name, rating=player.rating, score=1) for player in lower]
+    upper = [ Player(name=player.name, rating=player.rating, score=2) for player in upper]
 
     # Randomly permute them.
     shuffle(bottom)
@@ -51,7 +58,6 @@ We then create {num_attempts} teams randomly, and choose the one with the lowest
 
 
 def generate_pairings(teams):
-    average_rating_differences = []
     matches = []
     for i in range(3):
         all_pairs = []
@@ -67,21 +73,25 @@ def generate_pairings(teams):
         mg = MatchGenerator(all_pairs, all_constraints)
         first_matches, new_constraints = mg.generate()
         matches.append(first_matches)
-        average_rating_differences.append(first_matches.average_rating_difference)
         # display(HTML(first_matches.to_df(round_no=2*i+1).to_html()))
         mg = MatchGenerator(all_pairs, new_constraints)
         second_matches, _ = mg.generate()
         
-        average_rating_differences.append(second_matches.average_rating_difference)
 
         matches.append(second_matches)
+    return matches
 
 
-        # display(HTML(second_matches.to_df(round_no=2*i + 2).to_html()))
-
+def _check_difficulties(matches):
+    for match in matches:
+        difficulties = match.difficulty_counter
+        cumulative_difficulties += difficulties
     
-    total_average_rating_difference = sum(average_rating_differences) / len(average_rating_differences)
-    return matches, total_average_rating_difference
+    for player, difficulty in cumulative_difficulties:
+        if difficulty < 14 or difficulty > 16:
+            return False
+
+    return True
 
 
 def generate_best_pairings(teams, num_attempts=10000):
@@ -93,16 +103,20 @@ def generate_best_pairings(teams, num_attempts=10000):
         - No partners may player partners that they have played before (in previous rounds).
     """
 
-    lowest_average_rating_difference = 1000000
-    best_matches = None
+    cumulative_difficulties = Counter()
     
     for i in range(num_attempts):
-        matches, total_average_rating_difference = generate_pairings(teams)
-        if total_average_rating_difference < lowest_average_rating_difference:
-            lowest_average_rating_difference = total_average_rating_difference
-            best_matches = matches
-    
-    if best_matches:
-        print(f"After computing {num_attempts} possible pairings, found pairing with average rating difference: {round(lowest_average_rating_difference, 3)}")
-        for idx, match in enumerate(best_matches):
-             display(HTML(match.to_df(round_no=idx+1).to_html()))
+        matches = generate_pairings(teams)
+        for match in matches:
+            difficulties = match.difficulty_counter
+            cumulative_difficulties += difficulties
+        
+        if _check_difficulties(matches):
+            print("Passed!")
+        else:
+            print("Failed!")
+
+        # for idx, match in enumerate(best_matches):
+        #      display(HTML(match.to_df(round_no=idx+1).to_html()))
+
+        # # 

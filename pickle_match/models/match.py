@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pickle_match.models.pair import Pair
 from typing import List
+from collections import Counter
 import pandas as pd
 
 @dataclass
@@ -30,11 +31,13 @@ class Matches:
         dataframe = pd.DataFrame.from_dict(team_dict)
         dataframe.style.set_caption(f"Round {round_no} pairings")
         return dataframe
-    
+
     @property
-    def average_rating_difference(self):
-        total_rating_difference = 0
+    def difficulty_counter(self):
+        difficulty_counter = Counter()
         for match in self.matches:
-            first_pair, second_pair = match.first, match.second
-            total_rating_difference += abs(first_pair.average_rating - second_pair.average_rating)
-        return total_rating_difference / len(self.matches)
+            difficulty_map[match.first.first] = match.second.score
+            difficulty_map[match.first.second] = match.second.score
+            difficulty_map[match.second.first] = match.first.score
+            difficulty_map[match.second.second] = match.first.score
+        return difficulty_counter

@@ -4,3 +4,4 @@ from dataclasses import dataclass
 class Player:
     name: str
     rating: float
+    score: int = 0
