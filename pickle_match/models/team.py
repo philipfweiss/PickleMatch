@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from statistics import variance
+import pandas as pd
+
 from pickle_match.models.player import Player
 from typing import List
 
@@ -24,13 +26,17 @@ class Teams:
     def rating_variance(self):
         return variance(team.average_rating for team in self.teams)
 
-    def print_teams(self):
-        print(f" ~~ Created {len(self.teams)} Teams ~~")
-        print(f"Rating Variance: {self.rating_variance } ~~")
-        print("")
-    
+    def to_df(self):
+        print(f"-- Rating Variance: {self.rating_variance} --")
+        team_dict = {
+            "Team": [],
+            "Player": [],
+            "Rating": [],
+        }
         for idx, team in enumerate(self.teams):
-            print(f"----- Team {idx+1} -----")
             for player in team.players:
-                print(f" * {player.name}")
-            print("")
+                team_dict["Team"].append(idx)
+                team_dict["Player"].append(player.name)
+                team_dict["Rating"].append(player.rating)
+
+        return pd.DataFrame.from_dict(team_dict)
