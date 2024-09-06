@@ -11,6 +11,9 @@ class Match:
 class Matches:
     matches: List[Match]
 
+    def __iter__(self):
+        for match in self.matches:
+            yield match 
+
     def to_df(self):
         ...
-
