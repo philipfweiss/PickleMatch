@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pickle_match.models.pair import Pair
 from typing import List
+import pandas as pd
 
 @dataclass
 class Match:
@@ -15,5 +16,16 @@ class Matches:
         for match in self.matches:
             yield match 
 
-    def to_df(self):
-        ...
+    def to_df(self, round_no):
+        team_dict = {
+            "Team 1": [],
+            "Team 2": [],
+        }
+        for match in self.matches:
+            first_pair, second_pair = match.first, match.second
+            team_dict["Team 1"].append(f"{first_pair.first} and {first_pair.second}")
+            team_dict["Team 2"].append(f"{second_pair.first} and {second_pair.second}")
+
+        dataframe = pd.DataFrame.from_dict(team_dict)
+        dataframe.style.set_caption(f"Round {round_no} pairings")
+        return dataframe
