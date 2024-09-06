@@ -2,7 +2,7 @@ from pickle_match.models.team import Team, Teams
 from pickle_match.models.player import Player
 from pickle_match.strategy.match_generator import MatchGenerator
 from random import shuffle
-from collections import Counter
+from collections import Counter, defaultdict
 from IPython.display import display, HTML
 
 def chunks(lst, n):
@@ -82,6 +82,36 @@ def generate_pairings(teams):
     return matches
 
 
+def _check_team_balance(matches, teams):
+    player_to_team = {}
+    team_balance_map = defaultdict(Counter())
+    for team in teams:
+        for player in team.players:
+            player_to_team[player] = team
+    
+    for match in matches:
+        a, b, c, d = match.first.first, match.first.second, match.second.first, match.second.second
+        team_balance_map[a][player_to_team[b]] += 1
+        team_balance_map[a][player_to_team[c]] += 1
+        team_balance_map[a][player_to_team[d]] += 1
+
+        team_balance_map[b][player_to_team[a]] += 1
+        team_balance_map[b][player_to_team[c]] += 1
+        team_balance_map[b][player_to_team[d]] += 1
+
+        team_balance_map[c][player_to_team[a]] += 1
+        team_balance_map[c][player_to_team[b]] += 1
+        team_balance_map[c][player_to_team[d]] += 1
+
+        team_balance_map[d][player_to_team[a]] += 1
+        team_balance_map[d][player_to_team[b]] += 1
+        team_balance_map[d][player_to_team[c]] += 1
+    
+    return team_balance_map
+    
+    
+
+
 def _check_difficulties(matches):
     cumulative_difficulties = Counter()
 
@@ -90,7 +120,7 @@ def _check_difficulties(matches):
         cumulative_difficulties += difficulties
     
     for player, difficulty in cumulative_difficulties.items():
-        if difficulty < 14 or difficulty > 16:
+        if difficulty < 1 or difficulty > 16:
             return False
     
     print("----")
@@ -110,8 +140,5 @@ def generate_best_pairings(teams, num_attempts=100000):
     for i in range(num_attempts):
         matches = generate_pairings(teams)
         if _check_difficulties(matches):
-            print("Found one!", i)
-        # for idx, match in enumerate(best_matches):
-        #      display(HTML(match.to_df(round_no=idx+1).to_html()))
-
-        # # 
+            team_balance_map = _check_team_balance(matches, teams)
+            print(team_balance_map)
