@@ -3,7 +3,7 @@ from pickle_match.models.player import Player
 
 @dataclass(frozen=True)
 class Pair:
-    first: score + self.second.score
+    first: Player
     second: Player
     team_id: int
 
