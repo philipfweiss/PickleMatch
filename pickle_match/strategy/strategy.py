@@ -90,7 +90,7 @@ def _check_difficulties(matches):
         cumulative_difficulties += difficulties
     
     for player, difficulty in cumulative_difficulties.items():
-        if difficulty < 13 or difficulty > 16:
+        if difficulty < 14 or difficulty > 16:
             return False
     
     print("----")
