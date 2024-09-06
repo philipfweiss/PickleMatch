@@ -17,6 +17,13 @@ class Team:
     def average_rating(self):
         return sum(player.rating for player in self.players) / self.NUM_PLAYERS
 
+    @property
+    def pairs(self):
+        return [
+            Pair(first=first, second=second)
+            for first, second in combinations(self.players, 2)
+        ]
+
 @dataclass
 class Teams:
     teams: List[Team]
@@ -28,13 +35,6 @@ class Teams:
     @property 
     def rating_variance(self):
         return variance(team.average_rating for team in self.teams)
-
-    @property
-    def pairs(self):
-        return [
-            Pair(first=first, second=second)
-            for first, second in combinations(self.players, 2)
-        ]
 
     def to_df(self):
         print(f"-- Rating Variance: {self.rating_variance} --")
