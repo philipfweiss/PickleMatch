@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 from statistics import variance
+from itertools import combinations
 import pandas as pd
 
 from pickle_match.models.player import Player
+from pickle_match.models.pair import Pair
+
 from typing import List
 
 @dataclass
@@ -26,6 +29,13 @@ class Teams:
     def rating_variance(self):
         return variance(team.average_rating for team in self.teams)
 
+    @property
+    def pairs(self):
+        return [
+            Pair(first=first, second=second)
+            for first, second in combinations(self.players, 2)
+        ]
+
     def to_df(self):
         print(f"-- Rating Variance: {self.rating_variance} --")
         team_dict = {
@@ -40,3 +50,4 @@ class Teams:
                 team_dict["Rating"].append(player.rating)
 
         return pd.DataFrame.from_dict(team_dict)
+    
