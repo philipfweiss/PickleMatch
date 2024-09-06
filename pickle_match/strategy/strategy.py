@@ -1,4 +1,5 @@
 from pickle_match.models.team import Team, Teams
+from pickle_match.strategy.match_generator import MatchGenerator
 from random import shuffle
 
 def chunks(lst, n):
@@ -49,4 +50,27 @@ We then create {num_attempts} teams randomly, and choose the one with the lowest
 
 
 def generate_best_pairings(teams):
-    ...
+    """
+    We model pairings as a graph, where each node is 2 players (partners).
+
+    A valid pairing is a graph where every edge has degree 1, with constraints:
+        - No partners may play other partners on their team.
+        - No partners may player partners that they have played before (in previous rounds).
+    """
+    # First two rounds
+    all_pairs = []
+    all_constraints = []
+    for team in teams:
+        first_pair, second_pair = team.pairs[0], team.pairs[1]
+        first_constraints = team.default_constraints(first_pair)
+        second_constraints = team.default_constraints(second_pair)
+
+        all_pairs.add(first_pair)
+        all_pairs.add(second_pair)
+        all_constraints.add(first_constraints)
+        all_constraints.add(second_constraints)
+
+        rp = MatchGenerator(all_pairs, all_constraints)
+        first_matches, new_constraints = rp.generate()
+        rp = MatchGenerator(all_pairs, new_constraints)
+        second_matches, _ = rp.generate()

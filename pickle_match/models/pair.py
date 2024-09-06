@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pickle_match.models.player import Player
 
-@dataclass
+@dataclass(frozen=True)
 class Pair:
     first: Player
     second: Player

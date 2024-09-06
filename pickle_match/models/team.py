@@ -5,24 +5,37 @@ import pandas as pd
 
 from pickle_match.models.player import Player
 from pickle_match.models.pair import Pair
+from pickle_match.models.constraints import Constraints
 
 from typing import List
 
 @dataclass
 class Team:
-    NUM_PLAYERS = 4
     players: List[Player]
 
     @property
     def average_rating(self):
-        return sum(player.rating for player in self.players) / self.NUM_PLAYERS
+        return sum(player.rating for player in self.players) / 4
 
     @property
     def pairs(self):
+        a, b, c, d = self.players
         return [
-            Pair(first=first, second=second)
-            for first, second in combinations(self.players, 2)
+            Pair(first=a, second=b), # Round 1 
+            Pair(first=c, second=d),
+            Pair(first=a, second=c), # Round 2
+            Pair(first=b, second=d),
+            Pair(first=a, second=d), # Round 3
+            Pair(first=b, second=c),
         ]
+    
+
+    def default_constraints(self, pair):
+        return Constraints(
+            pair=pair,
+            constraints=self.pairs
+        )
+
 
 @dataclass
 class Teams:
