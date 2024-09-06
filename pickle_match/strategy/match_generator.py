@@ -39,6 +39,9 @@ class MatchGenerator:
         Pick completely random matches, and if they don't match constraints try again.
         """
         while True:
+            print(self.nodes)
+            print('foobar')
+            5/0
             shuffled_nodes = [node for node in self.nodes]
             shuffle(shuffled_nodes)
 
