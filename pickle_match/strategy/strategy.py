@@ -84,7 +84,7 @@ def generate_pairings(teams):
     return matches, total_average_rating_difference
 
 
-def generate_best_pairings(teams, num_attempts=100):
+def generate_best_pairings(teams, num_attempts=10000):
     """
     We model pairings as a graph, where each node is 2 players (partners).
 
@@ -92,6 +92,17 @@ def generate_best_pairings(teams, num_attempts=100):
         - No partners may play other partners on their team.
         - No partners may player partners that they have played before (in previous rounds).
     """
+
+    lowest_average_rating_difference = 1000000
+    best_matches = None
+    
     for i in range(num_attempts):
         matches, total_average_rating_difference = generate_pairings(teams)
-        print(i, total_average_rating_difference)
+        if total_average_rating_difference < lowest_average_rating_difference:
+            lowest_average_rating_difference = total_average_rating_difference
+            best_matches = matches
+    
+    if best_matches:
+        print(f"After computing {num_attempts} possible pairings, found pairing with average rating difference: {round(lowest_average_rating_difference, 3)}")
+        for idx, match in enumerate(best_matches):
+             display(HTML(match.to_df(round_no=idx+1).to_html()))
