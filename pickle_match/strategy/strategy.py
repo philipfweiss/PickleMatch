@@ -72,5 +72,7 @@ def generate_best_pairings(teams):
 
         rp = MatchGenerator(all_pairs, all_constraints)
         first_matches, new_constraints = rp.generate()
+        print(first_matches)
         rp = MatchGenerator(all_pairs, new_constraints)
         second_matches, _ = rp.generate()
+        print(second_matches)
