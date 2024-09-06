@@ -58,21 +58,20 @@ def generate_best_pairings(teams):
         - No partners may play other partners on their team.
         - No partners may player partners that they have played before (in previous rounds).
     """
-    # First two rounds
-    all_pairs = []
-    all_constraints = []
-    for team in teams:
-        first_pair, second_pair = team.pairs[0], team.pairs[1]
-        all_constraints += team.default_constraints(first_pair) 
-        all_constraints += team.default_constraints(second_pair)
-        all_pairs.append(first_pair)
-        all_pairs.append(second_pair)
+    for i in range(3):
+        all_pairs = []
+        all_constraints = []
+        for team in teams:
+            first_pair, second_pair = team.pairs[2*i], team.pairs[2*i + 1]
+            all_constraints += team.default_constraints(first_pair) 
+            all_constraints += team.default_constraints(second_pair)
+            all_pairs.append(first_pair)
+            all_pairs.append(second_pair)
 
 
-    mg = MatchGenerator(all_pairs, all_constraints)
-    first_matches, new_constraints = mg.generate()
-    display(HTML(first_matches.to_df(round_no=1).to_html()))
-    mg = MatchGenerator(all_pairs, new_constraints)
-    second_matches, _ = mg.generate()
-
-    display(HTML(second_matches.to_df(round_no=2).to_html()))
+        mg = MatchGenerator(all_pairs, all_constraints)
+        first_matches, new_constraints = mg.generate()
+        display(HTML(first_matches.to_df(round_no=2*i+1).to_html()))
+        mg = MatchGenerator(all_pairs, new_constraints)
+        second_matches, _ = mg.generate()
+        display(HTML(second_matches.to_df(round_no=2*i + 2).to_html()))
