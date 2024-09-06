@@ -50,14 +50,9 @@ We then create {num_attempts} teams randomly, and choose the one with the lowest
     return sorted(all_teams, key=lambda teams: teams.rating_variance)[0]
 
 
-def generate_best_pairings(teams):
-    """
-    We model pairings as a graph, where each node is 2 players (partners).
-
-    A valid pairing is a graph where every edge has degree 1, with constraints:
-        - No partners may play other partners on their team.
-        - No partners may player partners that they have played before (in previous rounds).
-    """
+def generate_pairings(teams):
+    average_rating_differences = []
+    matches = []
     for i in range(3):
         all_pairs = []
         all_constraints = []
@@ -71,7 +66,32 @@ def generate_best_pairings(teams):
 
         mg = MatchGenerator(all_pairs, all_constraints)
         first_matches, new_constraints = mg.generate()
-        display(HTML(first_matches.to_df(round_no=2*i+1).to_html()))
+        matches.append(first_matches)
+        average_rating_differences += first_matches.average_rating_difference
+        # display(HTML(first_matches.to_df(round_no=2*i+1).to_html()))
         mg = MatchGenerator(all_pairs, new_constraints)
         second_matches, _ = mg.generate()
-        display(HTML(second_matches.to_df(round_no=2*i + 2).to_html()))
+        
+        average_rating_differences += second_matches.average_rating_difference
+
+        matches.append(second_matches)
+
+
+        # display(HTML(second_matches.to_df(round_no=2*i + 2).to_html()))
+
+    
+    total_average_rating_difference = sum(average_rating_differences) / len(average_rating_differences)
+    return matches, total_average_rating_difference
+
+
+def generate_best_pairings(teams, num_attempts=100):
+    """
+    We model pairings as a graph, where each node is 2 players (partners).
+
+    A valid pairing is a graph where every edge has degree 1, with constraints:
+        - No partners may play other partners on their team.
+        - No partners may player partners that they have played before (in previous rounds).
+    """
+    for i in range(num_attempts):
+        matches, total_average_rating_difference = generate_pairings(teams)
+        print(i, total_average_rating_difference)

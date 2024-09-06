@@ -30,3 +30,11 @@ class Matches:
         dataframe = pd.DataFrame.from_dict(team_dict)
         dataframe.style.set_caption(f"Round {round_no} pairings")
         return dataframe
+    
+    @property
+    def average_rating_difference(self):
+        total_rating_difference = 0
+        for match in self.matches:
+            first_pair, second_pair = match.first, match.second
+            total_rating_difference += abs(first_pair.average_rating - second_pair.average_rating)
+        return total_rating_difference / len(self.matches)
