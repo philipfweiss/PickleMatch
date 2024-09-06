@@ -87,7 +87,7 @@ def _check_team_balance(matches, teams):
     team_balance_map = defaultdict(Counter)
     for team in teams:
         for player in team.players:
-            player_to_team[player] = team
+            player_to_team[player] = team.team_id
     
     for match in matches:
         for m in match:
