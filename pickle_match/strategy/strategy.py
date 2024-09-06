@@ -70,7 +70,7 @@ def generate_best_pairings(teams):
 
     mg = MatchGenerator(all_pairs, all_constraints)
     first_matches, new_constraints = mg.generate()
-    print(first_matches)
+    first_matches.to_df(round_no=1)
     mg = MatchGenerator(all_pairs, new_constraints)
     second_matches, _ = mg.generate()
-    print(second_matches)
+    second_matches.to_df(round_no=2)
