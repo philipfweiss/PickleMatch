@@ -1,6 +1,5 @@
-from models.team import Team
-from models.player import Player
+from loaders.load import load_players
+from strategy.strategy import generate_best_teams
 
-t = Team(players=[Player("philip", 10)])
-
-print(t.average_rating)
+players = load_players("examples/ratings.csv")
+teams = generate_best_teams(players)

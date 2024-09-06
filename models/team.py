@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from statistics import variance
 from models.player import Player
 from typing import List
 
@@ -9,4 +10,16 @@ class Team:
 
     @property
     def average_rating(self):
-        return sum(player.score for player in self.players) / self.NUM_PLAYERS
+        return sum(player.rating for player in self.players) / self.NUM_PLAYERS
+
+@dataclass
+class Teams:
+    teams: List[Team]
+
+    def __iter__(self):
+        for team in self.teams:
+            yield team 
+
+    @property 
+    def rating_variance(self):
+        return variance(team.average_rating for team in self.teams)

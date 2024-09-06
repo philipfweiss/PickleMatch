@@ -1,27 +1,33 @@
+import sys
+from models.team import Team, Teams
+from random import shuffle
+
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 def generate_teams(players):
-    # There must be a multiple of 4 players.
-    assert len(players) % 4 == 0
+    TEAM_SIZE = 4
+    
+    assert len(players) % TEAM_SIZE == 0
+    num_teams = len(players) // TEAM_SIZE
 
     # Sort the players by rating
-    sorted_players = sorted(players, lambda player: player.rating)
+    sorted_players = sorted(players, key=lambda player: player.rating)
+    groups = list(chunks(sorted_players, num_teams))
 
+    # Randomly permute them.
+    for group in groups: shuffle(group)
+    
+    # Pick random teams, one from each group.
+    teams = [ 
+        Team(
+            players=[group[i] for group in groups]
+        )
+        for i in range(num_teams)
+    ]
+    return Teams(teams=teams)
 
-"""
-Algorithm:
-- Let {p_1, p_2.... p_n} be the list of players, each with a rating r_i. 
-- Our goal is to find 
-    * Teams of four
-    * 6 rounds of play, switching partner every 2 rounds
-
-- We wish to minimize
-    * Let A(p_i) be the average opponent rating of player i.
-    * We want to minimize the variance of {A(p_1) .... A(p_n)}
-
-
-Two phases: assigning teams, and finding pairings.
-1. We assign teams of four where the skill level is as close to average as possible.
-2. We generate pairings according to rules above, then calculate the variance.
-
-We do this as many times as possible and pick the teams/pairings with minimal variance.
-"""
+def generate_best_teams(players, num_attempts=50):
+    all_teams = [generate_teams(players) for _ in range(num_attempts)]
+    return sorted(all_teams, key=lambda teams: teams.rating_variance)[0]
