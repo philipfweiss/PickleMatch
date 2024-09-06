@@ -36,8 +36,8 @@ class Matches:
     def difficulty_counter(self):
         difficulty_counter = Counter()
         for match in self.matches:
-            difficulty_map[match.first.first] = match.second.score
-            difficulty_map[match.first.second] = match.second.score
-            difficulty_map[match.second.first] = match.first.score
-            difficulty_map[match.second.second] = match.first.score
+            difficulty_counter[match.first.first] = match.second.score
+            difficulty_counter[match.first.second] = match.second.score
+            difficulty_counter[match.second.first] = match.first.score
+            difficulty_counter[match.second.second] = match.first.score
         return difficulty_counter
