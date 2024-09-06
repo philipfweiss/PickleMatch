@@ -1,4 +1,3 @@
-import sys
 from models.team import Team, Teams
 from random import shuffle
 
@@ -14,15 +13,20 @@ def generate_teams(players):
 
     # Sort the players by rating
     sorted_players = sorted(players, key=lambda player: player.rating)
-    groups = list(chunks(sorted_players, num_teams))
+
+    # Group for bottom 0-25%, 25-50%, 50+%
+    bottom, lower, middle, top = list(chunks(sorted_players, num_teams))
+    upper = middle + top
 
     # Randomly permute them.
-    for group in groups: shuffle(group)
+    shuffle(bottom)
+    shuffle(lower)
+    shuffle(upper)
     
-    # Pick random teams, one from each group.
+
     teams = [ 
         Team(
-            players=[group[i] for group in groups]
+            players=[bottom[i], lower[i], upper[2*i], upper[2*i+1]]
         )
         for i in range(num_teams)
     ]
@@ -31,3 +35,7 @@ def generate_teams(players):
 def generate_best_teams(players, num_attempts=50):
     all_teams = [generate_teams(players) for _ in range(num_attempts)]
     return sorted(all_teams, key=lambda teams: teams.rating_variance)[0]
+
+
+def generate_best_pairings(teams):
+    ...
