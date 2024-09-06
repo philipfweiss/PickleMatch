@@ -89,7 +89,7 @@ def _check_difficulties(matches):
         difficulties = match.difficulty_counter
         cumulative_difficulties += difficulties
     
-    for player, difficulty in cumulative_difficulties:
+    for difficulty in cumulative_difficulties.values():
         if difficulty < 14 or difficulty > 16:
             return False
 
