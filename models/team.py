@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from statistics import variance
-from PickleMatch.models.player import Player
+from models.player import Player
 from typing import List
 
 @dataclass

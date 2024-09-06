@@ -1,5 +1,5 @@
 import csv
-from PickleMatchmodels.player import Player
+from models.player import Player
 
 def load_players(filename):
     players = []
