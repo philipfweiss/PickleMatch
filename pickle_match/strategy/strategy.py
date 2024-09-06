@@ -89,9 +89,12 @@ def _check_difficulties(matches):
         difficulties = match.difficulty_counter
         cumulative_difficulties += difficulties
     
-    for difficulty in cumulative_difficulties.values():
+    for player, difficulty in cumulative_difficulties.items():
+        print(player, difficulty)
         if difficulty < 14 or difficulty > 16:
             return False
+    
+    print("----")
 
     return True
 
@@ -106,12 +109,10 @@ def generate_best_pairings(teams, num_attempts=10000):
     """
     
     for i in range(num_attempts):
+        print(i)
         matches = generate_pairings(teams)
         if _check_difficulties(matches):
-            print("Passed!")
-        else:
-            print("Failed!")
-
+            ...
         # for idx, match in enumerate(best_matches):
         #      display(HTML(match.to_df(round_no=idx+1).to_html()))
 
