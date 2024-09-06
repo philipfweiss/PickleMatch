@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 from statistics import variance
-from itertools import combinations
 import pandas as pd
 
 from pickle_match.models.player import Player
 from pickle_match.models.pair import Pair
-from pickle_match.models.constraints import Constraints
+from pickle_match.models.constraint import Constraint
 
 from typing import List
 
@@ -31,11 +30,13 @@ class Team:
     
 
     def default_constraints(self, pair):
-        return Constraints(
-            pair=pair,
-            constraints=self.pairs
-        )
-
+        return [
+            Constraint(
+                pair=pair,
+                denied_pair=deny
+            )
+            for deny in self.pairs
+        ]
 
 @dataclass
 class Teams:

@@ -62,17 +62,15 @@ def generate_best_pairings(teams):
     all_constraints = []
     for team in teams:
         first_pair, second_pair = team.pairs[0], team.pairs[1]
-        first_constraints = team.default_constraints(first_pair)
-        second_constraints = team.default_constraints(second_pair)
-
+        all_constraints += team.default_constraints(first_pair) 
+        all_constraints += team.default_constraints(second_pair)
         all_pairs.append(first_pair)
         all_pairs.append(second_pair)
-        all_constraints.append(first_constraints)
-        all_constraints.append(second_constraints)
 
-    rp = MatchGenerator(all_pairs, all_constraints)
-    first_matches, new_constraints = rp.generate()
+
+    mg = MatchGenerator(all_pairs, all_constraints)
+    first_matches, new_constraints = mg.generate()
     print(first_matches)
-    rp = MatchGenerator(all_pairs, new_constraints)
-    second_matches, _ = rp.generate()
+    mg = MatchGenerator(all_pairs, new_constraints)
+    second_matches, _ = mg.generate()
     print(second_matches)

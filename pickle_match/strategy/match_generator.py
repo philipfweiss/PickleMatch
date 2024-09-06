@@ -1,6 +1,7 @@
 from random import shuffle
 import collections
 from pickle_match.models.match import Match
+from pickle_match.models.constraints import Constraints
 
 class MatchGenerator:
     def __init__(self, pairs, constraints):
@@ -21,6 +22,11 @@ class MatchGenerator:
                     return False
         
         return True
+
+    def _update_constraints(self, matches):
+        for match in matches:
+            C
+        ...
     
     def generate(self):
         """
@@ -36,8 +42,8 @@ class MatchGenerator:
             ]
 
             if self._check_constraints(matches):
-                return matches
 
+                return matches
 
 
 
