@@ -25,7 +25,10 @@ class Teams:
         return variance(team.average_rating for team in self.teams)
 
     def print_teams(self):
-        print(f" ~~ {len(self.teams)} :: rating_variance {self.rating_variance } ~~")
+        print(f" ~~ Created {len(self.teams)} Teams ~~")
+        print(f"Rating Variance: {self.rating_variance } ~~")
+        print("")
+    
         for idx, team in enumerate(self.teams):
             print(f"----- Team {idx+1} -----")
             for player in team.players:
