@@ -45,7 +45,7 @@ class MatchGenerator:
 
             matches = Matches(matches=[
                 Match(first=shuffled_nodes[2*i], second=shuffled_nodes[2*i+1])
-                for i in range(len(shuffled_nodes // 2))
+                for i in range(len(shuffled_nodes) // 2)
             ])
 
             if self._check_constraints(matches):
