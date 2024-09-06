@@ -1,7 +1,7 @@
-from loaders.load import load_players
-from strategy.strategy import generate_best_teams
+from pickle_match.loaders.load import load_players
+from pickle_match.strategy.strategy import generate_best_teams
 
-players = load_players("examples/ratings.csv")
+players = load_players("pickle_match/examples/ratings.csv")
 teams = generate_best_teams(players)
 print(teams.rating_variance)
 # pairings = generate_best_pairings(players)
