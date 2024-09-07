@@ -91,7 +91,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
       team -> counter<team>
     }
     """
-    num_teams = len(teams)
+    num_teams = teams.num_teams
     player_to_team = {}
     team_balance_map = defaultdict(Counter)
     for team in teams:

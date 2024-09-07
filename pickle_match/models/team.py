@@ -47,6 +47,10 @@ class Teams:
         for team in self.teams:
             yield team 
 
+    @property
+    def num_teams(self):
+        return len(self.teams)
+
     @property 
     def rating_variance(self):
         return variance(team.average_rating for team in self.teams)
