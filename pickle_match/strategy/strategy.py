@@ -110,7 +110,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
             team_balance_map[second_team][first_team] += 1
 
     team_ctr = [
-        len(counter.values()) == num_teams
+        len(counter.values()) == (num_teams - 1)
         for counter in team_balance_map.values()
     ]
 
