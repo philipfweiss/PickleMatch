@@ -82,7 +82,7 @@ def generate_pairings(teams):
     return matches
 
 
-def _check_each_player_plays_4_or_more_teams(rounds, teams):
+def _check_all_teams_play_n_times(rounds, teams, n):
     # TODO THIS IS NOT CORRECT
     """
     Each player should play at least 2 other teams. 
@@ -117,7 +117,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
 
     # No team should play less than twice
     no_team_only_once = all([
-        min(counter.values()) > 1
+        min(counter.values()) >= n
         for counter in team_balance_map.values()
     ])
 
@@ -138,7 +138,7 @@ def _check_difficulties(rounds, min_difficulty, max_difficulty):
     return True
 
 
-def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_difficulty=16):
+def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_difficulty=16, all_teams_play_at_least=2):
     """
     We model pairings as a graph, where each node is 2 players (partners).
 
@@ -152,7 +152,7 @@ def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_di
             print(f"Simulation {i} did not pass...")
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds, min_difficulty, max_difficulty):
-            if _check_each_player_plays_4_or_more_teams(rounds, teams):
+            if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
                 print(
                     f"""
                     Found a pairing after {i} simulations where:
