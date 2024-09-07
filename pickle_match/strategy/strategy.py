@@ -119,7 +119,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
         for counter in team_balance_map.values()
     ]
 
-    percentage_above_four = sum(int(x) for x in unique_teams_per_player) / unique_teams_per_player
+    percentage_above_four = sum([int(x) for x in unique_teams_per_player]) / unique_teams_per_player
     return percentage_above_four > .8
 
 
