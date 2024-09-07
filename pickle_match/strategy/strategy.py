@@ -132,7 +132,7 @@ def _check_difficulties(rounds):
         cumulative_difficulties += difficulties
     
     for difficulty in cumulative_difficulties.values():
-        if difficulty < 1 or difficulty > 16:
+        if difficulty < 13 or difficulty > 16:
             return False
 
     return True
