@@ -114,6 +114,8 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
         for counter in team_balance_map.values()
     ]
 
+    print(team_ctr)
+
     all_teams_play_all_teams = all(team_ctr)
 
     return all_teams_play_all_teams
