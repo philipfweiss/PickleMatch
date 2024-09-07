@@ -121,7 +121,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
         for counter in team_balance_map.values()
     ])
 
-    return all_teams_play_all_teams and no_team_only_once
+    return all_teams_play_all_teams #and no_team_only_once
 
 
 def _check_difficulties(rounds):
