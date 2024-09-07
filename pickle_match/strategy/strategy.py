@@ -156,8 +156,8 @@ def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_di
                 print(
                     f"""
                     Found a pairing after {i} simulations where:
-                        * Everyone has difficulty score 14-16.
-                        * Every team plays every other team twice.
+                        * Everyone has difficulty score {min_difficulty}-{max_difficulty}.
+                        * Every team plays every other team {all_teams_play_at_least} times.
                     """
                 )
                 for i, tournament_round in enumerate(rounds):
