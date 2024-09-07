@@ -110,6 +110,10 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
 
             team_balance_map[t2a][first_team] += 1
             team_balance_map[t2b][first_team] += 1
+    
+    for player, counter in team_balance_map.items():
+        print(player, len(counter.values()))
+    print("----")
 
     return all([
         len(counter.values()) >= 4
