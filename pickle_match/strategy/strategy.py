@@ -113,13 +113,14 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
     
     for player, counter in team_balance_map.items():
         print(player, len(counter.values()))
-    print("----")
 
-    return all([
+    unique_teams_per_player = [
         len(counter.values()) >= 4
         for counter in team_balance_map.values()
-    ])
+    ]
 
+    percentage_above_four = sum(int(x) for x in unique_teams_per_player) / unique_teams_per_player
+    return percentage_above_four > .8
 
 
 def _check_difficulties(rounds):
