@@ -10,7 +10,7 @@ class Match:
     second: Pair
 
 @dataclass
-class Matches:
+class TournamentRound:
     matches: List[Match]
 
     def __iter__(self):

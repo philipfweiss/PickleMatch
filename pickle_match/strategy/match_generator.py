@@ -1,6 +1,6 @@
 from random import shuffle
 import collections
-from pickle_match.models.match import Match, Matches
+from pickle_match.models.match import Match, TournamentRound
 from pickle_match.models.constraint import Constraint
 
 class MatchGenerator:
@@ -43,13 +43,13 @@ class MatchGenerator:
             shuffled_nodes = [node for node in self.nodes]
             shuffle(shuffled_nodes)
 
-            matches = Matches(matches=[
+            tournament_round = TournamentRound(matches=[
                 Match(first=shuffled_nodes[2*i], second=shuffled_nodes[2*i+1])
                 for i in range(len(shuffled_nodes) // 2)
             ])
 
-            if self._check_constraints(matches):
-                return matches, self._update_constraints(matches)
+            if self._check_constraints(tournament_round):
+                return tournament_round, self._update_constraints(tournament_round)
 
 
 

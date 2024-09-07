@@ -82,37 +82,48 @@ def generate_pairings(teams):
     return matches
 
 
-def _check_team_balance(matches, teams):
+def _check_team_balance(rounds, teams):
     # TODO THIS IS NOT CORRECT
+    """
+    Each player should play at least 2 other teams. 
+    So we keep a map 
+    {
+      player -> counter<team>
+    }
+    """
     player_to_team = {}
     team_balance_map = defaultdict(Counter)
     for team in teams:
         for player in team.players:
             player_to_team[player] = team.team_id
     
-    for match in matches:
-        for m in match:
-            a, b, c, d = m.first.first, m.first.second, m.second.first, m.second.second
-            team_balance_map[player_to_team[a]][player_to_team[c]] += 1
-            team_balance_map[player_to_team[a]][player_to_team[d]] += 1
+    for tournament_round in rounds:
+        for match in tournament_round:
+            t1a, t1b = match.first.first, match.first.second
+            t2a, t2b = match.second.first, match.second.second
 
-            team_balance_map[player_to_team[c]][player_to_team[a]] += 1
-            team_balance_map[player_to_team[c]][player_to_team[b]] += 1
+            first_team = player_to_team[t1a]
+            second_team = player_to_team[t2a]
 
-    
+            team_balance_map[t1a][second_team] += 1
+            team_balance_map[t1b][second_team] += 1
+
+            team_balance_map[t2a][first_team] += 1
+            team_balance_map[t2b][first_team] += 1
+
     return team_balance_map
     
     
 
 
-def _check_difficulties(matches):
+def _check_difficulties(rounds):
     cumulative_difficulties = Counter()
 
-    for match in matches:
-        difficulties = match.difficulty_counter
+    for tournament_round in rounds:
+        difficulties = tournament_round.difficulty_counter
         cumulative_difficulties += difficulties
     
-    for player, difficulty in cumulative_difficulties.items():
+    for difficulty in cumulative_difficulties.values():
         if difficulty < 1 or difficulty > 16:
             return False
     
@@ -130,8 +141,8 @@ def generate_best_pairings(teams, num_attempts=100000):
         - No partners may player partners that they have played before (in previous rounds).
     """
     
-    for i in range(num_attempts):
-        matches = generate_pairings(teams)
-        if _check_difficulties(matches):
-            team_balance_map = _check_team_balance(matches, teams)
+    for _ in range(num_attempts):
+        rounds = generate_pairings(teams)
+        if _check_difficulties(rounds):
+            team_balance_map = _check_team_balance(rounds, teams)
             print(team_balance_map)
