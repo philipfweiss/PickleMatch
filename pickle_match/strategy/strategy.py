@@ -115,13 +115,13 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
         for counter in team_balance_map.values()
     ])
 
-    # No team should play another team 4 times
-    no_team_four_times = all([
-        max(counter.values()) < 4
+    # No team should play less than twice
+    no_team_only_once = all([
+        min(counter.values()) > 1
         for counter in team_balance_map.values()
     ])
 
-    return all_teams_play_all_teams and no_team_four_times
+    return all_teams_play_all_teams and no_team_only_once
 
 
 def _check_difficulties(rounds):
