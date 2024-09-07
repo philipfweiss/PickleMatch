@@ -109,16 +109,19 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
             team_balance_map[first_team][second_team] += 1
             team_balance_map[second_team][first_team] += 1
 
-    team_ctr = [
+    # All teams should play all teams
+    all_teams_play_all_teams = all([
         len(counter.values()) == (num_teams - 1)
         for counter in team_balance_map.values()
-    ]
+    ])
 
-    print(team_ctr)
+    # No team should play another team 4 times
+    no_team_four_times = all([
+        max(counter.values()) < 4
+        for counter in team_balance_map.values()
+    ])
 
-    all_teams_play_all_teams = all(team_ctr)
-
-    return all_teams_play_all_teams
+    return all_teams_play_all_teams and no_team_four_times
 
 
 def _check_difficulties(rounds):
@@ -150,6 +153,6 @@ def generate_best_pairings(teams, num_attempts=100000):
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds):
             if _check_each_player_plays_4_or_more_teams(rounds, teams):
-                print(f"Every player played 4 or more teams!")
+                print(f"Every team played all other teams, no more than 4 times.")
                 return
             print(f"Try {i} did not pass")
