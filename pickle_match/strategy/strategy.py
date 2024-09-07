@@ -153,6 +153,6 @@ def generate_best_pairings(teams, num_attempts=100000):
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds):
             if _check_each_player_plays_4_or_more_teams(rounds, teams):
-                print(f"Every team played all other teams, no more than 4 times.")
+                print(f"Every team played all other teams 2 or more times")
                 return
             print(f"Try {i} did not pass")
