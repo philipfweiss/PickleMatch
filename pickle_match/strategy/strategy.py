@@ -88,9 +88,10 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
     Each player should play at least 2 other teams. 
     So we keep a map 
     {
-      player -> counter<team>
+      team -> counter<team>
     }
     """
+    num_teams = len(teams)
     player_to_team = {}
     team_balance_map = defaultdict(Counter)
     for team in teams:
@@ -99,26 +100,23 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
     
     for tournament_round in rounds:
         for match in tournament_round:
-            t1a, t1b = match.first.first, match.first.second
-            t2a, t2b = match.second.first, match.second.second
+            t1a = match.first.first
+            t2a = match.second.first
 
             first_team = player_to_team[t1a]
             second_team = player_to_team[t2a]
 
-            team_balance_map[t1a][second_team] += 1
-            team_balance_map[t1b][second_team] += 1
+            team_balance_map[first_team][second_team] += 1
+            team_balance_map[second_team][first_team] += 1
 
-            team_balance_map[t2a][first_team] += 1
-            team_balance_map[t2b][first_team] += 1
-
-    unique_teams_per_player = [
-        len(counter.values()) >= 4
+    team_ctr = [
+        len(counter.values()) == num_teams
         for counter in team_balance_map.values()
     ]
 
-    percentage_above_four = sum([int(x) for x in unique_teams_per_player]) / len(unique_teams_per_player)
-    print(percentage_above_four)
-    return percentage_above_four > .9
+    all_teams_play_all_teams = all(team_ctr)
+
+    return all_teams_play_all_teams
 
 
 def _check_difficulties(rounds):
