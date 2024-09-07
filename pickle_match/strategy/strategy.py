@@ -82,7 +82,7 @@ def generate_pairings(teams):
     return matches
 
 
-def _check_team_balance(rounds, teams):
+def _check_each_player_plays_4_or_more_teams(rounds, teams):
     # TODO THIS IS NOT CORRECT
     """
     Each player should play at least 2 other teams. 
@@ -111,10 +111,10 @@ def _check_team_balance(rounds, teams):
             team_balance_map[t2a][first_team] += 1
             team_balance_map[t2b][first_team] += 1
 
-    return all(
-        all(val >= 2 for val in counter.values())
+    return all([
+        all(len(counter.values()) >= 4)
         for counter in team_balance_map.values()
-    )
+    ])
 
 
 
@@ -146,8 +146,7 @@ def generate_best_pairings(teams, num_attempts=100000):
     for i in range(num_attempts):
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds):
-            balanced = _check_team_balance(rounds, teams)
-            if balanced:
-                print(f"Try {i} is balanced!")
+            if _check_each_player_plays_4_or_more_teams(rounds, teams):
+                print(f"Every player played 4 or more teams!")
                 return
-            print(f"Try {i} is unbalanced")
+            print(f"Try {i} did not pass")
