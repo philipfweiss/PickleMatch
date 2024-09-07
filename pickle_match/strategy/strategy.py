@@ -134,8 +134,6 @@ def _check_difficulties(rounds):
     for difficulty in cumulative_difficulties.values():
         if difficulty < 1 or difficulty > 16:
             return False
-    
-    print("----")
 
     return True
 
