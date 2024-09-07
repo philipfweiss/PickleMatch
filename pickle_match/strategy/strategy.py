@@ -132,7 +132,7 @@ def _check_difficulties(rounds):
         cumulative_difficulties += difficulties
     
     for difficulty in cumulative_difficulties.values():
-        if difficulty < 13 or difficulty > 16:
+        if difficulty < 14 or difficulty > 16:
             return False
 
     return True
@@ -153,7 +153,13 @@ def generate_best_pairings(teams, num_attempts=100000):
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds):
             if _check_each_player_plays_4_or_more_teams(rounds, teams):
-                print(f"Every team played all other teams 2 or more times")
+                print(
+                    f"""
+                    Found a pairing after {i} simulations where:
+                        * Everyone has difficulty score 14-16.
+                        * Every team plays every other team twice.
+                    """
+                )
                 for i, tournament_round in enumerate(rounds):
                     display(HTML(tournament_round.to_df(round_no=2*i+1).to_html()))
                 return
