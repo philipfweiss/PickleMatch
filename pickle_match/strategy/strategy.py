@@ -161,6 +161,6 @@ def generate_best_pairings(teams, num_attempts=100000):
                     """
                 )
                 for i, tournament_round in enumerate(rounds):
-                    display(HTML(tournament_round.to_df(round_no=2*i+1).to_html()))
+                    display(HTML(tournament_round.to_df(round_no=i+1).to_html()))
                 return
 
