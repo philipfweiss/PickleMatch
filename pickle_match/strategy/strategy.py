@@ -111,9 +111,11 @@ def _check_team_balance(rounds, teams):
             team_balance_map[t2a][first_team] += 1
             team_balance_map[t2b][first_team] += 1
 
-    return team_balance_map
-    
-    
+    return all(
+        all(val >= 2 for val in counter.values())
+        for counter in team_balance_map.values()
+    )
+
 
 
 def _check_difficulties(rounds):
@@ -141,8 +143,11 @@ def generate_best_pairings(teams, num_attempts=100000):
         - No partners may player partners that they have played before (in previous rounds).
     """
     
-    for _ in range(num_attempts):
+    for i in range(num_attempts):
         rounds = generate_pairings(teams)
         if _check_difficulties(rounds):
-            team_balance_map = _check_team_balance(rounds, teams)
-            print(team_balance_map)
+            balanced = _check_team_balance(rounds, teams)
+            if balanced:
+                print(f"Try {i} is balanced!")
+                return
+            print(f"Try {i} is unbalanced")
