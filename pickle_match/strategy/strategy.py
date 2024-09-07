@@ -121,7 +121,7 @@ def _check_each_player_plays_4_or_more_teams(rounds, teams):
         for counter in team_balance_map.values()
     ])
 
-    return all_teams_play_all_teams #and no_team_only_once
+    return all_teams_play_all_teams and no_team_only_once
 
 
 def _check_difficulties(rounds):
@@ -156,3 +156,5 @@ def generate_best_pairings(teams, num_attempts=100000):
                 print(f"Every team played all other teams 2 or more times")
                 for i, tournament_round in enumerate(rounds):
                     display(HTML(tournament_round.to_df(round_no=2*i+1).to_html()))
+                return
+
