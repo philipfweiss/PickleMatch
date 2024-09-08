@@ -174,7 +174,6 @@ def generate_best_pairings(
                     best_schedule = schedule
                     min_deviation = deviation
 
-
             else:
                 if _check_difficulties(schedule, min_difficulty, max_difficulty, explain):
                     print(
@@ -198,5 +197,5 @@ def generate_best_pairings(
         """
     )
     if explain:
-        print(schedule.cumulative_difficulties)
-    schedule.display()
+        print(best_schedule.cumulative_difficulties)
+    best_schedule.display()
