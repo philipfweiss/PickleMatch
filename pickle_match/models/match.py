@@ -3,6 +3,7 @@ from pickle_match.models.pair import Pair
 from typing import List
 from collections import Counter
 import pandas as pd
+from IPython.display import display, HTML
 
 @dataclass
 class Match:
@@ -42,3 +43,24 @@ class TournamentRound:
             difficulty_counter[match.second.first] = match.first.score
             difficulty_counter[match.second.second] = match.first.score
         return difficulty_counter
+
+@dataclass
+class TournamentRounds:
+    rounds = List[TournamentRound]
+
+    def __iter__(self):
+        for match in self.rounds:
+            yield match 
+    
+    def display(self):
+        for i, tournament_round in enumerate(self.rounds):
+            display(HTML(tournament_round.to_df(round_no=i+1).to_html()))
+
+    @property
+    def cumulative_difficulties(self):
+        cumulative_difficulties = Counter()
+
+        for tournament_round in self.rounds:
+            difficulties = tournament_round.difficulty_counter
+            cumulative_difficulties += difficulties
+        return cumulative_difficulties

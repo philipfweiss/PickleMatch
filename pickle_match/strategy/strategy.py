@@ -1,9 +1,9 @@
 from pickle_match.models.team import Team, Teams
 from pickle_match.models.player import Player
+from pickle_match.models.match import TournamentRounds
 from pickle_match.strategy.match_generator import MatchGenerator
 from random import shuffle
 from collections import Counter, defaultdict
-from IPython.display import display, HTML
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):
@@ -79,7 +79,7 @@ def generate_pairings(teams):
         
 
         matches.append(second_matches)
-    return matches
+    return TournamentRounds(rounds=matches)
 
 
 def _check_all_teams_play_n_times(rounds, teams, n):
@@ -126,25 +126,31 @@ def _check_all_teams_play_n_times(rounds, teams, n):
     else:
         return True
 
+def _cum_deviation(rounds, explain=False):
+    cumulative_difficulties = rounds.cumulative_difficulties
+    cum_deviation = 0
+
+    for difficulty in cumulative_difficulties.values():
+        cum_deviation += abs(15-difficulty)
+    return cum_deviation
 
 def _check_difficulties(rounds, min_difficulty, max_difficulty, explain=False):
-    cumulative_difficulties = Counter()
+    cumulative_difficulties = rounds.cumulative_difficulties
 
-    for tournament_round in rounds:
-        difficulties = tournament_round.difficulty_counter
-        cumulative_difficulties += difficulties
-    
     for difficulty in cumulative_difficulties.values():
         if difficulty < min_difficulty or difficulty > max_difficulty:
             return False
-
-    if explain:
-        print(cumulative_difficulties)
-
     return True
 
-
-def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_difficulty=16, all_teams_play_at_least=2, explain=False):
+def generate_best_pairings(
+        teams,
+        num_attempts=100000,
+        min_difficulty=14,
+        max_difficulty=16,
+        all_teams_play_at_least=2,
+        minimize_deviation=False,
+        explain=False,
+):
     """
     We model pairings as a graph, where each node is 2 players (partners).
 
@@ -157,16 +163,22 @@ def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_di
         if i % 1000 == 0:
             print(f"Simulation {i} did not pass...")
         rounds = generate_pairings(teams)
-        if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
-            if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
-                print(
-                    f"""
-                    Found a pairing after {i} simulations where:
-                        * Everyone has difficulty score {min_difficulty}-{max_difficulty}.
-                        * Every team plays every other team {all_teams_play_at_least} times.
-                    """
-                )
-                for i, tournament_round in enumerate(rounds):
-                    display(HTML(tournament_round.to_df(round_no=i+1).to_html()))
-                return
 
+        if minimize_deviation:
+           ...
+
+        else:
+            if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
+                if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
+                    print(
+                        f"""
+                        Found a pairing after {i} simulations where:
+                            * Everyone has difficulty score {min_difficulty}-{max_difficulty}.
+                            * Every team plays every other team {all_teams_play_at_least} times.
+                        """
+                    )
+
+                    if explain:
+                        print(rounds.cumulative_difficulties)
+                    rounds.display()
+                return
