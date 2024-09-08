@@ -181,4 +181,4 @@ def generate_best_pairings(
                     if explain:
                         print(rounds.cumulative_difficulties)
                     rounds.display()
-                return
+                    return
