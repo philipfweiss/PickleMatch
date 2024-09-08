@@ -1,6 +1,6 @@
 from pickle_match.models.team import Team, Teams
 from pickle_match.models.player import Player
-from pickle_match.models.match import TournamentRounds
+from pickle_match.models.match import Schedule
 from pickle_match.strategy.match_generator import MatchGenerator
 from random import shuffle
 from collections import Counter, defaultdict
@@ -79,10 +79,10 @@ def generate_pairings(teams):
         
 
         matches.append(second_matches)
-    return TournamentRounds(rounds=matches)
+    return Schedule(rounds=matches)
 
 
-def _check_all_teams_play_n_times(rounds, teams, n):
+def _check_all_teams_play_n_times(schedule, teams, n):
     # TODO THIS IS NOT CORRECT
     """
     Each player should play at least 2 other teams. 
@@ -98,7 +98,7 @@ def _check_all_teams_play_n_times(rounds, teams, n):
         for player in team.players:
             player_to_team[player] = team.team_id
     
-    for tournament_round in rounds:
+    for tournament_round in schedule:
         for match in tournament_round:
             t1a = match.first.first
             t2a = match.second.first
@@ -126,16 +126,16 @@ def _check_all_teams_play_n_times(rounds, teams, n):
     else:
         return True
 
-def _cum_deviation(rounds, explain=False):
-    cumulative_difficulties = rounds.cumulative_difficulties
+def _cum_deviation(schedule, explain=False):
+    cumulative_difficulties = schedule.cumulative_difficulties
     cum_deviation = 0
 
     for difficulty in cumulative_difficulties.values():
         cum_deviation += abs(15-difficulty)
     return cum_deviation
 
-def _check_difficulties(rounds, min_difficulty, max_difficulty, explain=False):
-    cumulative_difficulties = rounds.cumulative_difficulties
+def _check_difficulties(schedule, min_difficulty, max_difficulty, explain=False):
+    cumulative_difficulties = schedule.cumulative_difficulties
 
     for difficulty in cumulative_difficulties.values():
         if difficulty < min_difficulty or difficulty > max_difficulty:
@@ -158,18 +158,25 @@ def generate_best_pairings(
         - No partners may play other partners on their team.
         - No partners may player partners that they have played before (in previous rounds).
     """
+
+    min_deviation = 100000
+    best_schedule = None
     
     for i in range(num_attempts):
         if i % 1000 == 0:
             print(f"Simulation {i} did not pass...")
-        rounds = generate_pairings(teams)
+        schedule = generate_pairings(teams)
+        if _check_all_teams_play_n_times(schedule, teams, n=all_teams_play_at_least):
 
-        if minimize_deviation:
-           ...
+            if minimize_deviation:
+                deviation = _cum_deviation(schedule)
+                if deviation < min_deviation:
+                    best_schedule = schedule
+                    min_deviation = deviation
 
-        else:
-            if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
-                if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
+
+            else:
+                if _check_difficulties(schedule, min_difficulty, max_difficulty, explain):
                     print(
                         f"""
                         Found a pairing after {i} simulations where:
@@ -178,9 +185,18 @@ def generate_best_pairings(
                         """
                     )
 
-                    print("3")
-
                     if explain:
-                        print(rounds.cumulative_difficulties)
-                    rounds.display()
+                        print(schedule.cumulative_difficulties)
+                    schedule.display()
                     return
+    
+    print(
+        f"""
+        Found a pairing after {num_attempts} simulations where:
+            * Total difficulty deviation was minimized at {min_deviation}
+            * Every team plays every other team {all_teams_play_at_least} times.
+        """
+    )
+    if explain:
+        print(schedule.cumulative_difficulties)
+    schedule.display()

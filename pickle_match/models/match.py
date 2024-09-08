@@ -45,7 +45,7 @@ class TournamentRound:
         return difficulty_counter
 
 @dataclass
-class TournamentRounds:
+class Schedule:
     rounds: List[TournamentRound]
 
     def __iter__(self):
