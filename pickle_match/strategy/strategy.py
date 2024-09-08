@@ -169,9 +169,7 @@ def generate_best_pairings(
 
         else:
             if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
-                print('1')
                 if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
-                    print("2")
                     print(
                         f"""
                         Found a pairing after {i} simulations where:
