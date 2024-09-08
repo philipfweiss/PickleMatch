@@ -46,7 +46,7 @@ class TournamentRound:
 
 @dataclass
 class TournamentRounds:
-    rounds = List[TournamentRound]
+    rounds: List[TournamentRound]
 
     def __iter__(self):
         for match in self.rounds:
