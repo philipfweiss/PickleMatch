@@ -169,7 +169,9 @@ def generate_best_pairings(
 
         else:
             if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
+                print('1')
                 if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
+                    print("2")
                     print(
                         f"""
                         Found a pairing after {i} simulations where:
@@ -177,6 +179,8 @@ def generate_best_pairings(
                             * Every team plays every other team {all_teams_play_at_least} times.
                         """
                     )
+
+                    print("3")
 
                     if explain:
                         print(rounds.cumulative_difficulties)
