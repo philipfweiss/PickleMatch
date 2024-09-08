@@ -131,7 +131,7 @@ def _cum_deviation(schedule, explain=False):
     cum_deviation = 0
 
     for difficulty in cumulative_difficulties.values():
-        cum_deviation += abs(15-difficulty)
+        cum_deviation += abs(15-difficulty)**2
     return cum_deviation
 
 def _check_difficulties(schedule, min_difficulty, max_difficulty, explain=False):
