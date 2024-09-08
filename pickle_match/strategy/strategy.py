@@ -110,18 +110,21 @@ def _check_all_teams_play_n_times(rounds, teams, n):
             team_balance_map[second_team][first_team] += 1
 
     # All teams should play all teams
-    all_teams_play_all_teams = all([
-        len(counter.values()) == (num_teams - 1)
-        for counter in team_balance_map.values()
-    ])
+    if n > 0:
+        all_teams_play_all_teams = all([
+            len(counter.values()) == (num_teams - 1)
+            for counter in team_balance_map.values()
+        ])
 
-    # No team should play less than twice
-    no_team_only_once = all([
-        min(counter.values()) >= n
-        for counter in team_balance_map.values()
-    ])
+        # No team should play less than twice
+        no_team_only_once = all([
+            min(counter.values()) >= n
+            for counter in team_balance_map.values()
+        ])
 
-    return all_teams_play_all_teams and no_team_only_once
+        return all_teams_play_all_teams and no_team_only_once
+    else:
+        return True
 
 
 def _check_difficulties(rounds, min_difficulty, max_difficulty, explain=False):
