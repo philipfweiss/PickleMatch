@@ -124,7 +124,7 @@ def _check_all_teams_play_n_times(rounds, teams, n):
     return all_teams_play_all_teams and no_team_only_once
 
 
-def _check_difficulties(rounds, min_difficulty, max_difficulty):
+def _check_difficulties(rounds, min_difficulty, max_difficulty, explain=False):
     cumulative_difficulties = Counter()
 
     for tournament_round in rounds:
@@ -135,10 +135,13 @@ def _check_difficulties(rounds, min_difficulty, max_difficulty):
         if difficulty < min_difficulty or difficulty > max_difficulty:
             return False
 
+    if explain:
+        print(cumulative_difficulties)
+
     return True
 
 
-def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_difficulty=16, all_teams_play_at_least=2):
+def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_difficulty=16, all_teams_play_at_least=2, explain=False):
     """
     We model pairings as a graph, where each node is 2 players (partners).
 
@@ -151,7 +154,7 @@ def generate_best_pairings(teams, num_attempts=100000, min_difficulty=14, max_di
         if i % 1000 == 0:
             print(f"Simulation {i} did not pass...")
         rounds = generate_pairings(teams)
-        if _check_difficulties(rounds, min_difficulty, max_difficulty):
+        if _check_difficulties(rounds, min_difficulty, max_difficulty, explain):
             if _check_all_teams_play_n_times(rounds, teams, n=all_teams_play_at_least):
                 print(
                     f"""
