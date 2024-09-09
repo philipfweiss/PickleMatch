@@ -122,6 +122,8 @@ def _check_all_teams_play_n_times(schedule, teams, n, k):
             for counter in team_balance_map.values()
         ])
 
+        print(team_balance_map)
+
         return all_teams_play_all_teams and no_team_only_once
     else:
         return True
