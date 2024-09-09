@@ -82,7 +82,7 @@ def generate_pairings(teams):
     return Schedule(rounds=matches)
 
 
-def _check_all_teams_play_n_times(schedule, teams, n):
+def _check_all_teams_play_n_times(schedule, teams, n, k):
     # TODO THIS IS NOT CORRECT
     """
     Each player should play at least 2 other teams. 
@@ -116,9 +116,9 @@ def _check_all_teams_play_n_times(schedule, teams, n):
             for counter in team_balance_map.values()
         ])
 
-        # No team should play less than twice
+        # No team should play more than n times and less than k times.
         no_team_only_once = all([
-            min(counter.values()) >= n
+            min(counter.values()) >= n and max(counter.values()) <= k
             for counter in team_balance_map.values()
         ])
 
@@ -148,6 +148,7 @@ def generate_best_pairings(
         min_difficulty=14,
         max_difficulty=16,
         all_teams_play_at_least=2,
+        all_teams_play_at_most=3,
         minimize_deviation=False,
         explain=False,
 ):
@@ -166,7 +167,7 @@ def generate_best_pairings(
         if i % 1000 == 0:
             print(f"Simulation {i} did not pass...")
         schedule = generate_pairings(teams)
-        if _check_all_teams_play_n_times(schedule, teams, n=all_teams_play_at_least):
+        if _check_all_teams_play_n_times(schedule, teams, n=all_teams_play_at_least, k=all_teams_play_at_most):
 
             if minimize_deviation:
                 deviation = _cum_deviation(schedule)
