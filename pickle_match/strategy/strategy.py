@@ -25,17 +25,19 @@ def generate_teams(players):
 
     bottom = [ Player(name=player.name, rating=player.rating, score=0) for player in bottom]
     lower = [ Player(name=player.name, rating=player.rating, score=1) for player in lower]
+    middle = [ Player(name=player.name, rating=player.rating, score=1) for player in middle]
     upper = [ Player(name=player.name, rating=player.rating, score=2) for player in upper]
 
     # Randomly permute them.
     shuffle(bottom)
     shuffle(lower)
+    shuffle(middle)
     shuffle(upper)
     
 
     teams = [ 
         Team(
-            players=[bottom[i], lower[i], upper[2*i], upper[2*i+1]], team_id=i+1
+            players=[bottom[i], lower[i], middle[i], upper[2*i+1]], team_id=i+1
         )
         for i in range(num_teams)
     ]
