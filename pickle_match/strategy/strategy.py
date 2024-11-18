@@ -18,15 +18,15 @@ def generate_teams(players):
     # Sort the players by rating
     sorted_players = sorted(players, key=lambda player: player.rating)
 
-    # Group for bottom 0-25%, 25-50%, 50+%
+    # Group for bottom 0-25%, 25-50%, 50-75%, 75-100%
     bottom, lower, middle, top = list(chunks(sorted_players, num_teams))
     upper = middle + top
 
 
     bottom = [ Player(name=player.name, rating=player.rating, score=0) for player in bottom]
     lower = [ Player(name=player.name, rating=player.rating, score=1) for player in lower]
-    middle = [ Player(name=player.name, rating=player.rating, score=1) for player in middle]
-    upper = [ Player(name=player.name, rating=player.rating, score=2) for player in upper]
+    middle = [ Player(name=player.name, rating=player.rating, score=2) for player in middle]
+    upper = [ Player(name=player.name, rating=player.rating, score=3) for player in upper]
 
     # Randomly permute them.
     shuffle(bottom)
@@ -47,9 +47,9 @@ def generate_best_teams(players, num_attempts=50, explain=False):
     if explain:
         print(f"""
 
-Splitting players into three groups (Bottom Quarter, Lower Quarter, Top Half).
+Splitting players into four groups (quartiles)
 
-Each team will have 1 player from bottom, 1 from lower, and 2 from top half.
+Each team will have 1 from each quartile.
 
 We then create {num_attempts} teams randomly, and choose the one with the lowest rating variance between teams.
               """
